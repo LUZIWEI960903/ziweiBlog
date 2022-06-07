@@ -8,6 +8,8 @@
 *.idea
 ./tmp
 *static
+*public
+*template
 
 # Test binary, built with `go test -c`
 *.test
