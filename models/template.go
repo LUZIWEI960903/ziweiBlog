@@ -29,7 +29,6 @@ func (t *TemplateBlog) WriteData(w io.Writer, data interface{}) {
 }
 
 func InitTemplate(templateDir string) HtmlTemplate {
-
 	tp := readTemplate([]string{"index", "category", "custom", "detail", "login", "pigeonhole", "writing"}, templateDir)
 	var htmlTemplate HtmlTemplate
 	htmlTemplate.Index = tp[0]
@@ -39,6 +38,7 @@ func InitTemplate(templateDir string) HtmlTemplate {
 	htmlTemplate.Login = tp[4]
 	htmlTemplate.Pigeonhole = tp[5]
 	htmlTemplate.Writing = tp[6]
+	return htmlTemplate
 }
 
 func IsODD(num int) bool {
@@ -58,7 +58,6 @@ func readTemplate(templates []string, templateDir string) []TemplateBlog {
 	for _, view := range templates {
 		viewName := view + ".html"
 		t := template.New(viewName)
-
 		home := templateDir + "home.html"
 		header := templateDir + "layout/header.html"
 		footer := templateDir + "layout/footer.html"
@@ -68,12 +67,13 @@ func readTemplate(templates []string, templateDir string) []TemplateBlog {
 		t.Funcs(template.FuncMap{"isODD": IsODD, "getNextName": GetNextName, "date": Date})
 		t, err := t.ParseFiles(templateDir+viewName, home, header, footer, personal, post, pagination)
 		if err != nil {
-			log.Println(err)
+			log.Printf("load view %v error: %v\n", viewName, err)
 		}
 
 		var tb TemplateBlog
 		tb.Template = t
 		tbs = append(tbs, tb)
+
 	}
 	return tbs
 }

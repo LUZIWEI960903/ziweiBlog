@@ -7,13 +7,15 @@ import (
 	"ziweiBlog/models"
 )
 
-//type IndexData struct {
-//	Title string `json:"title"`
-//	Desc  string `json:"desc"`
-//}
+func init() {
+	// load template
+	comment.LoadTemplate()
+}
 
 func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
+
 	index := comment.Template.Index
+
 	var categorys = []models.Category{
 		{
 			Cid:  1,
@@ -42,6 +44,7 @@ func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
 		Pages:     []int{1},
 		PageEnd:   true,
 	}
+
 	index.WriteData(w, hr)
 
 }

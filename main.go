@@ -3,14 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"ziweiBlog/comment"
 	"ziweiBlog/router"
 )
-
-func init() {
-	// load template
-	comment.LoadTemplate()
-}
 
 func main() {
 	server := http.Server{
