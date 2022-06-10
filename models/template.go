@@ -28,9 +28,12 @@ func (t *TemplateBlog) WriteData(w io.Writer, data interface{}) {
 	}
 }
 
-func InitTemplate(templateDir string) HtmlTemplate {
-	tp := readTemplate([]string{"index", "category", "custom", "detail", "login", "pigeonhole", "writing"}, templateDir)
+func InitTemplate(templateDir string) (HtmlTemplate, error) {
+	tp, err := readTemplate([]string{"index", "category", "custom", "detail", "login", "pigeonhole", "writing"}, templateDir)
 	var htmlTemplate HtmlTemplate
+	if err != nil {
+		return htmlTemplate, err
+	}
 	htmlTemplate.Index = tp[0]
 	htmlTemplate.Category = tp[1]
 	htmlTemplate.Custom = tp[2]
@@ -38,7 +41,7 @@ func InitTemplate(templateDir string) HtmlTemplate {
 	htmlTemplate.Login = tp[4]
 	htmlTemplate.Pigeonhole = tp[5]
 	htmlTemplate.Writing = tp[6]
-	return htmlTemplate
+	return htmlTemplate, nil
 }
 
 func IsODD(num int) bool {
@@ -53,7 +56,11 @@ func Date(format string) string {
 	return time.Now().Format(format)
 }
 
-func readTemplate(templates []string, templateDir string) []TemplateBlog {
+func DateDay(date time.Time) string {
+	return date.Format("2006-01-02 15:04:05")
+}
+
+func readTemplate(templates []string, templateDir string) ([]TemplateBlog, error) {
 	var tbs []TemplateBlog
 	for _, view := range templates {
 		viewName := view + ".html"
@@ -64,10 +71,11 @@ func readTemplate(templates []string, templateDir string) []TemplateBlog {
 		personal := templateDir + "layout/personal.html"
 		post := templateDir + "layout/post-list.html"
 		pagination := templateDir + "layout/pagination.html"
-		t.Funcs(template.FuncMap{"isODD": IsODD, "getNextName": GetNextName, "date": Date})
+		t.Funcs(template.FuncMap{"isODD": IsODD, "getNextName": GetNextName, "date": Date, "dateDay": DateDay})
 		t, err := t.ParseFiles(templateDir+viewName, home, header, footer, personal, post, pagination)
 		if err != nil {
-			log.Printf("load view %v error: %v\n", viewName, err)
+			log.Printf("load view `%v` error: %v\n", viewName, err)
+			return nil, err
 		}
 
 		var tb TemplateBlog
@@ -75,5 +83,5 @@ func readTemplate(templates []string, templateDir string) []TemplateBlog {
 		tbs = append(tbs, tb)
 
 	}
-	return tbs
+	return tbs, nil
 }
