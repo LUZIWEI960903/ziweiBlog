@@ -28,6 +28,12 @@ func (t *TemplateBlog) WriteData(w io.Writer, data interface{}) {
 	}
 }
 
+func (t *TemplateBlog) WriteError(w io.Writer, err error) {
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
+}
+
 func InitTemplate(templateDir string) (HtmlTemplate, error) {
 	tp, err := readTemplate([]string{"index", "category", "custom", "detail", "login", "pigeonhole", "writing"}, templateDir)
 	var htmlTemplate HtmlTemplate
