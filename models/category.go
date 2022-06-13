@@ -6,3 +6,8 @@ type Category struct {
 	CreateAt string
 	UpdateAt string
 }
+
+type CategoryRes struct {
+	*HomeRes
+	CategoryName string
+}

@@ -24,10 +24,10 @@ func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageStr := r.Form.Get("page")
-	page := 1
-	if pageStr != "" {
-		page, _ = strconv.Atoi(pageStr)
+	if pageStr == "" {
+		pageStr = "1"
 	}
+	page, _ := strconv.Atoi(pageStr)
 	pageSize := 10
 
 	hr, err := service.GetAllIndexInfo(page, pageSize)

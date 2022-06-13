@@ -46,3 +46,45 @@ func GetPostCount() int {
 	_ = row.Scan(&total)
 	return total
 }
+
+func GetPostPageByCategoryId(page, pageSize, categoryId int) ([]models.Post, error) {
+	rows, err := DB.Query("select * from blog_post where category_id = ? limit ?,?", categoryId, pageSize*(page-1), pageSize)
+	if err != nil {
+		log.Println("GetPostPageByCategoryId [DB.Query] error:", err)
+		return nil, err
+	}
+
+	var posts []models.Post
+
+	for rows.Next() {
+		var post models.Post
+		err = rows.Scan(
+			&post.Pid,
+			&post.Title,
+			&post.Slug,
+			&post.Content,
+			&post.Markdown,
+			&post.CategoryId,
+			&post.UserId,
+			&post.ViewCount,
+			&post.Type,
+			&post.CreateAt,
+			&post.UpdateAt,
+		)
+		if err != nil {
+			log.Println("GetPostPageByCategoryId [rows.Scan] error:", err)
+			return nil, err
+		}
+
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
+func GetPostCountByCategoryId(categoryId int) int {
+	row := DB.QueryRow("select count(1) from blog_post where category_id = ?", categoryId)
+	var total int
+	_ = row.Scan(&total)
+	return total
+}
