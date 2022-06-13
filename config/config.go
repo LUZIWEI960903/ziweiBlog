@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/BurntSushi/toml"
 	"os"
+
+	"github.com/BurntSushi/toml"
 )
 
 type tomlConfig struct {
@@ -25,6 +26,7 @@ type SystemConfig struct {
 	AppName         string
 	Version         float32
 	CurrentDir      string
+	CdnURL          string
 	QiniuAccessKey  string
 	QiniuSecretKey  string
 	Valine          bool
