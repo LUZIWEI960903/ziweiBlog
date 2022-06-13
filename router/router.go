@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"ziweiBlog/api"
 	"ziweiBlog/views"
 )
 
@@ -17,6 +18,8 @@ func Router() {
 	http.HandleFunc("/c/", views.HTML.Category)
 	// 登录页面
 	http.HandleFunc("/login", views.HTML.Login)
+	// 登录接口
+	http.HandleFunc("/api/v1/login", api.API.Login)
 
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
