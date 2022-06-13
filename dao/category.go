@@ -8,7 +8,7 @@ import (
 func GetAllCategory() ([]models.Category, error) {
 	rows, err := DB.Query("select * from blog_category")
 	if err != nil {
-		log.Fatal("GetAllCategory [DB.Query] error:", err)
+		log.Println("GetAllCategory [DB.Query] error:", err)
 		return nil, err
 	}
 
@@ -17,10 +17,20 @@ func GetAllCategory() ([]models.Category, error) {
 		var category models.Category
 		err = rows.Scan(&category.Cid, &category.Name, &category.CreateAt, &category.UpdateAt)
 		if err != nil {
-			log.Fatal("GetAllCategory [rows.Scan] error:", err)
+			log.Println("GetAllCategory [rows.Scan] error:", err)
 			return nil, err
 		}
 		categorys = append(categorys, category)
 	}
 	return categorys, nil
+}
+
+func GetCategoryNameById(categoryId int) string {
+	row := DB.QueryRow("select name from blog_category where cid = ?", categoryId)
+	if row.Err() != nil {
+		log.Println("GetCategoryNameById [DB.QueryRow] error:", row.Err())
+	}
+	var categoryName string
+	_ = row.Scan(&categoryName)
+	return categoryName
 }

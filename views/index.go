@@ -3,6 +3,7 @@ package views
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"ziweiBlog/comment"
 	"ziweiBlog/service"
 )
@@ -16,10 +17,24 @@ func (*HTMLApi) Index(w http.ResponseWriter, r *http.Request) {
 
 	index := comment.Template.Index
 
-	hr, err := service.GetAllIndexInfo()
+	if err := r.ParseForm(); err != nil {
+		log.Println("Index [r.ParseForm()] error:", err)
+		index.WriteDefaultError(w, err)
+		return
+	}
+
+	pageStr := r.Form.Get("page")
+	page := 1
+	if pageStr != "" {
+		page, _ = strconv.Atoi(pageStr)
+	}
+	pageSize := 10
+
+	hr, err := service.GetAllIndexInfo(page, pageSize)
 	if err != nil {
-		log.Fatal("Index [service.GetAllIndexInfo] error:",err)
-		index.
+		log.Println("Index [service.GetAllIndexInfo] error:", err)
+		index.WriteDefaultError(w, err)
+		return
 	}
 
 	index.WriteData(w, hr)
