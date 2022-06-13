@@ -15,5 +15,8 @@ func Router() {
 	http.HandleFunc("/", views.HTML.Index)
 	// 根据category显示文章列表的页面
 	http.HandleFunc("/c/", views.HTML.Category)
+	// 登录页面
+	http.HandleFunc("/login", views.HTML.Login)
+
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
