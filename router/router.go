@@ -22,6 +22,8 @@ func Router() {
 	http.HandleFunc("/api/v1/login", api.API.Login)
 	// 根据postId显示文章详情的页面
 	http.HandleFunc("/p/", views.HTML.Detail)
+	// 发表post的页面
+	http.HandleFunc("/writing", views.HTML.Writing)
 
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
