@@ -23,3 +23,15 @@ func Writing() (*models.WritingRes, error) {
 func SavePost(post *models.Post) {
 	dao.SavePost(post)
 }
+
+func GetPost(postId int) (*models.Post, error) {
+	post, err := dao.GetPostById(postId)
+	if err != nil {
+		return nil, err
+	}
+	return post, nil
+}
+
+func UpdatePost(post *models.Post) {
+	dao.UpdatePost(post)
+}

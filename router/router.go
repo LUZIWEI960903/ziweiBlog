@@ -26,6 +26,10 @@ func Router() {
 	http.HandleFunc("/writing", views.HTML.Writing)
 	// 发表post
 	http.HandleFunc("/api/v1/post", api.API.Writing)
+	// 刷新post
+	http.HandleFunc("/api/v1/post/", api.API.GetPost)
+	// post归档的页面
+	http.HandleFunc("/pigeonhole/", views.HTML.Pigeonhole)
 
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }

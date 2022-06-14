@@ -8,15 +8,29 @@ import (
 	"ziweiBlog/models"
 )
 
-func GetAllIndexInfo(page, pageSize int) (*models.HomeRes, error) {
+func GetAllIndexInfo(slug string, page, pageSize int) (*models.HomeRes, error) {
 	categorys, err := dao.GetAllCategory()
 	if err != nil {
 		return nil, err
 	}
 
-	posts, err := dao.GetPostPage(page, pageSize)
-	if err != nil {
-		return nil, err
+	var (
+		posts []models.Post
+		total int
+	)
+
+	if slug == "" {
+		posts, err = dao.GetPostPage(page, pageSize)
+		if err != nil {
+			return nil, err
+		}
+		total = dao.GetPostCount()
+	} else {
+		posts, err = dao.GetPostPageBySlug(slug, page, pageSize)
+		if err != nil {
+			return nil, err
+		}
+		total = dao.GetPostCountBySlug(slug)
 	}
 
 	var postMores []models.PostMore
@@ -44,7 +58,6 @@ func GetAllIndexInfo(page, pageSize int) (*models.HomeRes, error) {
 		postMores = append(postMores, postMore)
 	}
 
-	total := dao.GetPostCount()
 	pageCount := math.Ceil(float64(total) / float64(page))
 	var pages []int
 	for i := 0; i < int(pageCount); i++ {

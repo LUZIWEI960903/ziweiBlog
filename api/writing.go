@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 	"ziweiBlog/comment"
 	"ziweiBlog/models"
@@ -55,6 +56,50 @@ func (a *Api) Writing(w http.ResponseWriter, r *http.Request) {
 		comment.Success(w, post)
 	case http.MethodPut:
 		// update
+		params := comment.GetRequestJsonParams(r)
+		categoryId := params["categoryId"].(float64)
+		content := params["content"].(string)
+		markdown := params["markdown"].(string)
+		slug := params["slug"].(string)
+		title := params["title"].(string)
+		postType := params["type"].(float64)
+		postId := params["pid"].(float64)
+
+		post := &models.Post{
+			Pid:        int(postId),
+			Title:      title,
+			Slug:       slug,
+			Content:    content,
+			Markdown:   markdown,
+			CategoryId: int(categoryId),
+			UserId:     claim.Uid,
+			ViewCount:  0,
+			Type:       int(postType),
+			CreateAt:   time.Now(),
+			UpdateAt:   time.Now(),
+		}
+		service.UpdatePost(post)
+		comment.Success(w, post)
 	}
 
+}
+
+func (a *Api) GetPost(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	postIdStr := strings.TrimPrefix(path, "/api/v1/post/")
+	postId, err := strconv.Atoi(postIdStr)
+	if err != nil {
+		log.Println("GetPost [strconv.Atoi] error:", err)
+		comment.Error(w, errors.New("Server error, please contact the administrator~"))
+		return
+	}
+
+	post, err := service.GetPost(postId)
+	if err != nil {
+		log.Println("GetPost [service.GetPost] error:", err)
+		comment.Error(w, err)
+		return
+	}
+
+	comment.Success(w, post)
 }
