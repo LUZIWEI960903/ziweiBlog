@@ -19,3 +19,7 @@ func Writing() (*models.WritingRes, error) {
 	wr.Categorys = category
 	return wr, nil
 }
+
+func SavePost(post *models.Post) {
+	dao.SavePost(post)
+}

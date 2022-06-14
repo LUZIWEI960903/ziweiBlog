@@ -24,6 +24,8 @@ func Router() {
 	http.HandleFunc("/p/", views.HTML.Detail)
 	// 发表post的页面
 	http.HandleFunc("/writing", views.HTML.Writing)
+	// 发表post
+	http.HandleFunc("/api/v1/post", api.API.Writing)
 
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
