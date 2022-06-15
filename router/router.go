@@ -30,6 +30,8 @@ func Router() {
 	http.HandleFunc("/api/v1/post/", api.API.GetPost)
 	// post归档的页面
 	http.HandleFunc("/pigeonhole/", views.HTML.Pigeonhole)
+	// 搜索功能
+	http.HandleFunc("/api/v1/post/search", api.API.Search)
 
 	http.Handle("/resource/", http.StripPrefix("/resource/", http.FileServer(http.Dir("public/resource/"))))
 }
