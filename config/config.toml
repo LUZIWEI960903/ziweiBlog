@@ -15,3 +15,5 @@
     ValineAppid = "JNoRw41FJCnicel6z6G4UpiX-gzGzoHsz"
     ValineAppkey = "PAkl9WUcr06fqQbg78w6zdce"
     ValineServerURL = "jnorw41f.lc-cn-n1-shared.com"
+    Host = "127.0.0.1"
+    Port = "8080"

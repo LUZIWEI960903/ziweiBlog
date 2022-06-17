@@ -33,6 +33,8 @@ type SystemConfig struct {
 	ValineAppid     string
 	ValineAppkey    string
 	ValineServerURL string
+	Host            string
+	Port            string
 }
 
 var Cfg *tomlConfig
